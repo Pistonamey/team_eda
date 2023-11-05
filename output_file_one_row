@@ -1,0 +1,2 @@
+id,approved,reason_for_rejection,accepted_under_conditions,credit_score_approved,ltv_approved,dti_approved,fedti_approved
+1,False,DTI ratio too high: 550.00%.;FEDTI ratio above preferred level of 28%.,[],True,True,False,False
