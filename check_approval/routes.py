@@ -7,6 +7,9 @@ import csv
 from sendgrid import SendGridAPIClient, Attachment
 from sendgrid.helpers.mail import Mail
 from base64 import b64encode
+from llama_hub.smart_pdf_loader import SmartPDFLoader
+from llama_index import VectorStoreIndex
+
 
 @check_aprvl.route('/check_approval/csv_file', methods=['POST', 'GET'])
 @cross_origin()
@@ -320,3 +323,55 @@ def send_email():
         os.remove(filename)
 
     return jsonify({"message": "Email successfully sent. Please check your email."}), 200
+
+
+
+@check_aprvl.route('/get_info_LTV_fannie_mae', methods=['POST'])
+@cross_origin()
+def get_info_ltv_fannie_mae():
+    # Extract the question from the incoming JSON data
+    data = request.json
+    question = data.get("question")
+
+    if not question:
+        return jsonify({"error": "No question provided"}), 400
+
+    # Your existing setup for API calls
+    llmsherpa_api_url = "https://readers.llmsherpa.com/api/document/developer/parseDocument?renderFormat=all"
+    pdf_url = "https://singlefamily.fanniemae.com/media/20786/display"
+    pdf_loader = SmartPDFLoader(llmsherpa_api_url=llmsherpa_api_url)
+    documents = pdf_loader.load_data(pdf_url)
+    index = VectorStoreIndex.from_documents(documents)
+    query_engine = index.as_query_engine()
+
+    # Perform the query with the provided question
+    response = query_engine.query(question)
+    
+    # Assuming 'response' is the desired output, format it into JSON
+    # You might need to transform the response into a more suitable format depending on its structure
+    return jsonify({"message": "success", "response": str(response)})
+
+@check_aprvl.route('/get_info_dti_fannie_mae', methods=['POST'])
+@cross_origin()
+def get_info_dti_fannie_mae():
+    # Extract the question from the incoming JSON data
+    data = request.json
+    question = data.get("question")
+
+    if not question:
+        return jsonify({"error": "No question provided"}), 400
+
+    # Your existing setup for API calls
+    llmsherpa_api_url = "https://readers.llmsherpa.com/api/document/developer/parseDocument?renderFormat=all"
+    pdf_url = "https://www.urban.org/sites/default/files/publication/91936/fannie_mae_raises_dti_limit.pdf"
+    pdf_loader = SmartPDFLoader(llmsherpa_api_url=llmsherpa_api_url)
+    documents = pdf_loader.load_data(pdf_url)
+    index = VectorStoreIndex.from_documents(documents)
+    query_engine = index.as_query_engine()
+
+    # Perform the query with the provided question
+    response = query_engine.query(question)
+    
+    # Assuming 'response' is the desired output, format it into JSON
+    # You might need to transform the response into a more suitable format depending on its structure
+    return jsonify({"message": "success", "response": str(response)})
