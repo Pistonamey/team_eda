@@ -18,11 +18,11 @@ Follow these steps to set up your development environment:
 
 1. Clone the repository to your local machine:
     ```
-    git clone https://github.com/your_username/mortgage-eligibility-detector.git
+    git clone https://github.com/Pistonamey/team_eda.git
     ```
 2. Navigate to the project directory:
     ```
-    cd mortgage-eligibility-detector
+    cd team_eda
     ```
 3. Install the required Python packages:
     ```
